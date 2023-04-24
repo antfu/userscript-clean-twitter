@@ -1,7 +1,7 @@
 {
   "name": "userscript-clean-twitter",
   "type": "module",
-  "version": "0.4.0",
+  "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@8.1.1",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
@@ -15,7 +15,7 @@
   "bugs": "https://github.com/antfu/userscript-clean-twitter/issues",
   "scripts": {
     "lint": "eslint .",
-    "release": "bumpp -x \"node bump.js\" --all"
+    "release": "bumpp"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.38.4",

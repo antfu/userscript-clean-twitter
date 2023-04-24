@@ -2,7 +2,7 @@
 
 ~~Blue check~~, ~~Twitter Blue~~, ~~Verified Organization~~, ~~Communities~~, ~~Trending~~, ~~Search & Explore~~, ~~Who to follow~~. **All gone**.
 
-[Install on Greasyfork]()
+[Install on Greasyfork](https://greasyfork.org/en/scripts/464719-clean-twitter)
 
 <img width="1342" alt="image" src="https://user-images.githubusercontent.com/11247099/233882053-8a8338f0-ee99-471c-b6a6-e382790444d8.png">
 

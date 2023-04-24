@@ -2,11 +2,15 @@
 // @name         Clean Twitter
 // @namespace    http://antfu.me/
 // @version      0.0.0
-// @description  Have some peace on Twitter
-// @author       Anthony Fu
+// @description  Bring back peace on Twitter
+// @author       Anthony Fu (https://github.com/antfu)
+// @license      MIT
+// @homepageURL  https://github.com/antfu/userscript-clean-twitter
+// @supportURL   https://github.com/antfu/userscript-clean-twitter
 // @match        https://twitter.com/**
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=twitter.com
 // @grant        none
+// @run-at       document-start
 // ==/UserScript==
 
 (function() {

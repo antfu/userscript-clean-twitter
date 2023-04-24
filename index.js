@@ -13,8 +13,8 @@
 // @run-at       document-start
 // ==/UserScript==
 
-(function() {
-  'use strict';
+(function () {
+  'use strict'
   const style = document.createElement('style')
   const hides = [
     // verified badge
@@ -24,12 +24,14 @@
     // submean
     '* > [href="/i/verified-orgs-signup"]',
     // sidebar
-    '[aria-label="Trending"] > * > *:nth-child(3), [aria-label="Trending"] > * > *:nth-child(4)'
+    '[aria-label="Trending"] > * > *:nth-child(3), [aria-label="Trending"] > * > *:nth-child(4)',
+    // tab
+    '[href="/notifications/verified"][role="tab"]',
   ]
   style.innerHTML = [
     `${hides.join(',')}{ display: none !important; }`,
     // styling
-    '[aria-label="Search Twitter"] { margin-top: 20px !important; }'
+    '[aria-label="Search Twitter"] { margin-top: 20px !important; }',
   ].join('')
-  document.body.appendChild(style);
-})();
+  document.body.appendChild(style)
+})()

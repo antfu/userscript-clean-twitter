@@ -1,6 +1,6 @@
 # Userscript: Clean Twitter
 
-~~Blue check~~, ~~Twitter Blue~~, ~~Verified Organization~~, ~~Communities~~, ~~Trending~~, ~~Search & Explore~~, ~~Who to follow~~. **All gone**.
+~~Blue check~~, ~~Twitter Blue~~, ~~Verified Organization~~, ~~Communities~~, ~~Trending~~, ~~Search & Explore~~, ~~Who to follow~~, ~~For you~~. **All gone**.
 
 [Install on Greasyfork](https://greasyfork.org/en/scripts/464719-clean-twitter)
 

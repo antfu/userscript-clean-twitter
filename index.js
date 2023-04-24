@@ -25,8 +25,10 @@
     '* > [href="/i/verified-orgs-signup"]',
     // sidebar
     '[aria-label="Trending"] > * > *:nth-child(3), [aria-label="Trending"] > * > *:nth-child(4)',
-    // tab
-    '[href="/notifications/verified"][role="tab"]',
+    // "Verified" tab
+    '[role="presentation"]:has(> [href="/notifications/verified"][role="tab"])',
+    // Home tabs
+    '[role="tablist"]:has([href="/home"][role="tab"])',
   ]
   style.innerHTML = [
     `${hides.join(',')}{ display: none !important; }`,
@@ -34,4 +36,15 @@
     '[aria-label="Search Twitter"] { margin-top: 20px !important; }',
   ].join('')
   document.body.appendChild(style)
+
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      // Select "Following" tab on home page, if not
+      if (window.location.pathname === '/home') {
+        const tabs = document.querySelectorAll('[href="/home"][role="tab"]')
+        if (tabs.length === 2 && tabs[1].getAttribute('aria-selected') === 'false')
+          tabs[1].click()
+      }
+    }, 500)
+  })
 })()

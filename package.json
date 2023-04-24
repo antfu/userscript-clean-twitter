@@ -15,7 +15,7 @@
   "bugs": "https://github.com/antfu/userscript-clean-twitter/issues",
   "scripts": {
     "lint": "eslint .",
-    "release": "bumpp"
+    "release": "bumpp -x \"node bump.js\" --all"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.38.4",

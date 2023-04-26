@@ -19,52 +19,37 @@
 (function () {
   'use strict'
 
-  const defaultMenuAll = {
-    'Hide Home tabs': true,
-  }
-  const menuAll = GM_getValue('menu_all', defaultMenuAll)
-  function syncMenuWithDefault(menuAll, defaultMenuAll) {
-  // Add new menu from default, if not exist yet
-    for (const name in defaultMenuAll) {
-      if (!(name in menuAll))
-        menuAll[name] = defaultMenuAll[name]
+  function useOption(key, title, defaultValue) {
+    if (typeof GM_getValue === 'undefined') {
+      return {
+        value: defaultValue,
+      }
     }
-    // Remove old menu, if not exist in default
-    for (const name in menuAll) {
-      if (!(name in defaultMenuAll))
-        delete menuAll[name]
-    }
-    GM_setValue('menu_all', menuAll)
-  }
-  syncMenuWithDefault(menuAll, defaultMenuAll)
 
-  const menuIds = GM_getValue('menu_ids', {})
-  function registerMenuCommand(name, value) {
-    const menuText = ` ${name}: ${value ? '✅' : '❌'}`
-    const commandCallback = () => {
-      menuAll[name] = !menuAll[name]
-      GM_setValue('menu_all', menuAll)
-      updateMenu()
-      location.reload()
+    let value = GM_getValue(key, defaultValue)
+    const ref = {
+      get value() {
+        return value
+      },
+      set value(v) {
+        value = v
+        GM_setValue(key, v)
+        location.reload()
+      },
     }
-    return GM_registerMenuCommand(menuText, commandCallback)
-  }
-  function updateMenu() {
-    for (const name in menuAll) {
-      const value = menuAll[name]
-      if (menuIds[name])
-        GM_unregisterMenuCommand(menuIds[name])
 
-      menuIds[name] = registerMenuCommand(name, value)
-    }
-    GM_setValue('menu_ids', menuIds)
+    GM_registerMenuCommand(`${title}: ${value ? '✅' : '❌'}`, () => {
+      ref.value = !value
+    })
+
+    return ref
   }
-  updateMenu()
+
+  const hideHomeTabs = useOption('twitter_hide_home_tabs', 'Hide Home Tabs', true)
+  const hideBlueBadge = useOption('twitter_hide_blue_badge', 'Hide Blue Badges', true)
 
   const style = document.createElement('style')
   const hides = [
-    // verified badge
-    '*:has(> * > [aria-label="Verified account"])',
     // menu
     '[aria-label="Communities (New items)"], [aria-label="Communities"], [aria-label="Twitter Blue"], [aria-label="Timeline: Trending now"], [aria-label="Who to follow"], [aria-label="Search and explore"], [aria-label="Verified Organizations"]',
     // submean
@@ -73,24 +58,30 @@
     '[aria-label="Trending"] > * > *:nth-child(3), [aria-label="Trending"] > * > *:nth-child(4)',
     // "Verified" tab
     '[role="presentation"]:has(> [href="/notifications/verified"][role="tab"])',
+    // verified badge
+    hideBlueBadge.value && '*:has(> * > [aria-label="Verified account"])',
     // Home tabs
-    menuAll['Hide Home tabs'] ? '[role="tablist"]:has([href="/home"][role="tab"])' : '',
-  ]
+    hideHomeTabs.value && '[role="tablist"]:has([href="/home"][role="tab"])',
+  ].filter(Boolean)
+
   style.innerHTML = [
-    `${hides.filter(s => s !== '').join(',')}{ display: none !important; }`,
+    `${hides.join(',')}{ display: none !important; }`,
     // styling
     '[aria-label="Search Twitter"] { margin-top: 20px !important; }',
   ].join('')
+
   document.body.appendChild(style)
 
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      // Select "Following" tab on home page, if not
-      if (window.location.pathname === '/home') {
-        const tabs = document.querySelectorAll('[href="/home"][role="tab"]')
-        if (tabs.length === 2 && tabs[1].getAttribute('aria-selected') === 'false')
-          tabs[1].click()
-      }
-    }, 500)
-  })
+  // Select "Following" tab on home page, if not
+  if (hideHomeTabs.value) {
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        if (window.location.pathname === '/home') {
+          const tabs = document.querySelectorAll('[href="/home"][role="tab"]')
+          if (tabs.length === 2 && tabs[1].getAttribute('aria-selected') === 'false')
+            tabs[1].click()
+        }
+      }, 500)
+    })
+  }
 })()

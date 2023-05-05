@@ -45,21 +45,20 @@
     return ref
   }
 
-  function iDoNotWantToSeeWhereYouSaveTo(keys) {
+  function iDoNotWantToSeeWhereYouSaveTo(nodes, keys) {
+    const els = Array.from(nodes)
+    let loadMore = els.filter(el => el.textContent.includes('显示更多回复'))
+    loadMore = loadMore && loadMore.length
+
     keys.forEach((key) => {
-      const nodes = document.querySelectorAll('div[data-testid=\'cellInnerDiv\']')
-      if (nodes && nodes.length) {
-        const divs = Array.from(nodes)
-        divs.filter(el => el.textContent.includes(key)).forEach(div => div.classList.add('must-hide'))
-      }
+      els.filter(el => el.textContent.includes(key)).forEach(el => el.classList.add('must-hide'))
     })
+    return loadMore
   }
 
   const hideHomeTabs = useOption('twitter_hide_home_tabs', 'Hide Home Tabs', true)
   const hideBlueBadge = useOption('twitter_hide_blue_badge', 'Hide Blue Badges', true)
   const hideSaveTo = useOption('twitter_hide_save_to', 'Hide RT of SaveTo', true)
-
-  let checkSaveToTimer = 0
   const mustHide = ['@SaveToNotion', '@savetonotion', '@readwise', '@threadreaderapp', '@SaveToBookmarks']
   const style = document.createElement('style')
   const hides = [
@@ -98,15 +97,26 @@
       }, 500)
     })
   }
-  
+
   if (hideSaveTo.value) {
     window.addEventListener('load', () => {
-      checkSaveToTimer = setInterval(() => {
-        if (hideSaveTo.value)
-          iDoNotWantToSeeWhereYouSaveTo(mustHide)
-        else
-          checkSaveToTimer && clearInterval(checkSaveToTimer)
-      }, 500)
+      setTimeout(() => {
+        if (window.location.pathname.match(/([^\/]*\/status\/[^\?]*)/g)) {
+          const primaryColumn = document.querySelector('div[data-testid=\'primaryColumn\']')
+          const observer = new MutationObserver((mutations) => {
+          // console.log(mutations)
+            mutations.forEach((m) => {
+              if (m.target.className === '' && m.target.nodeName === 'DIV' && m.addedNodes && m.addedNodes.length) {
+                const theEnd = iDoNotWantToSeeWhereYouSaveTo(m.addedNodes, mustHide)
+                if (theEnd)
+                  // console.log('disconnect')
+                  observer.disconnect()
+              }
+            })
+          })
+          observer.observe(primaryColumn, { childList: true, subtree: true })
+        }
+      }, 1000)
     })
   }
 })()

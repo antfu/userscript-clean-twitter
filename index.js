@@ -45,11 +45,25 @@
     return ref
   }
 
+  function iDoNotWantToSeeWhereYouSaveTo(keys) {
+    keys.forEach((key) => {
+      const nodes = document.querySelectorAll('div[data-testid=\'cellInnerDiv\']')
+      if (nodes && nodes.length) {
+        const divs = Array.from(nodes)
+        divs.filter(el => el.textContent.includes(key)).forEach(div => div.classList.add('must-hide'))
+      }
+    })
+  }
+
   const hideHomeTabs = useOption('twitter_hide_home_tabs', 'Hide Home Tabs', true)
   const hideBlueBadge = useOption('twitter_hide_blue_badge', 'Hide Blue Badges', true)
+  const hideSaveTo = useOption('twitter_hide_save_to', 'Hide RT of SaveTo', true)
 
+  let checkSaveToTimer = 0
+  const mustHide = ['@SaveToNotion', '@savetonotion', '@readwise', '@threadreaderapp', '@SaveToBookmarks']
   const style = document.createElement('style')
   const hides = [
+    '.must-hide',
     // menu
     '[aria-label="Communities (New items)"], [aria-label="Communities"], [aria-label="Twitter Blue"], [aria-label="Timeline: Trending now"], [aria-label="Who to follow"], [aria-label="Search and explore"], [aria-label="Verified Organizations"]',
     // submean
@@ -81,6 +95,17 @@
           if (tabs.length === 2 && tabs[1].getAttribute('aria-selected') === 'false')
             tabs[1].click()
         }
+      }, 500)
+    })
+  }
+  
+  if (hideSaveTo.value) {
+    window.addEventListener('load', () => {
+      checkSaveToTimer = setInterval(() => {
+        if (hideSaveTo.value)
+          iDoNotWantToSeeWhereYouSaveTo(mustHide)
+        else
+          checkSaveToTimer && clearInterval(checkSaveToTimer)
       }, 500)
     })
   }

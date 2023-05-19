@@ -13,7 +13,7 @@
 // @grant        GM_setValue
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
-// @run-at       document-start
+// @run-at       document-body
 // ==/UserScript==
 
 (function () {

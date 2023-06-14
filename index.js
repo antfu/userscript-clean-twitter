@@ -72,16 +72,47 @@
 
   document.body.appendChild(style)
 
-  // Select "Following" tab on home page, if not
-  if (hideHomeTabs.value) {
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        if (window.location.pathname === '/home') {
-          const tabs = document.querySelectorAll('[href="/home"][role="tab"]')
-          if (tabs.length === 2 && tabs[1].getAttribute('aria-selected') === 'false')
-            tabs[1].click()
-        }
-      }, 500)
+  function selectedFollowingTab() {
+    if (hideHomeTabs.value) {
+      if (window.location.pathname === '/home') {
+        const tabs = document.querySelectorAll('[href="/home"][role="tab"]')
+        if (tabs.length === 2 && tabs[1].getAttribute('aria-selected') === 'false')
+          tabs[1].click()
+      }
+    }
+  }
+
+  function hideDiscoverMore() {
+    const conversations = document.querySelector('[aria-label="Timeline: Conversation"]')?.children[0]
+    if (!conversations)
+      return
+
+    let hide = false
+    Array.from(conversations.children).forEach((el) => {
+      if (hide) {
+        el.style.display = 'none'
+        return
+      }
+
+      const span = el.querySelector('h2 > div > span')
+
+      if (span?.textContent.trim() === 'Discover more') {
+        hide = true
+        el.style.display = 'none'
+      }
     })
   }
+
+  // Select "Following" tab on home page, if not
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      selectedFollowingTab()
+      hideDiscoverMore()
+    }, 500)
+    // TODO: use a better way to detect the tab is loaded
+    setTimeout(() => {
+      hideDiscoverMore()
+    }, 1500)
+    hideDiscoverMore()
+  })
 })()

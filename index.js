@@ -55,7 +55,7 @@
     // submean
     '* > [href="/i/verified-orgs-signup"]',
     // sidebar
-    '[aria-label="Trending"] > * > *:nth-child(3), [aria-label="Trending"] > * > *:nth-child(4)',
+    '[aria-label="Trending"] > * > *:nth-child(3), [aria-label="Trending"] > * > *:nth-child(4), [aria-label="Trending"] > * > *:nth-child(5)',
     // "Verified" tab
     '[role="presentation"]:has(> [href="/notifications/verified"][role="tab"])',
     // verified badge

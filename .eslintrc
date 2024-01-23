@@ -2,5 +2,14 @@
   "extends": "@antfu",
   "rules": {
     "no-undef": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["index.js"],
+      "extends": "plugin:userscripts/recommended",
+      "rules": {
+        "userscripts/filename-user": "off"
+      }
+    }
+  ]
 }

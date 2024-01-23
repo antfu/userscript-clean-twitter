@@ -5,6 +5,7 @@
 // @description  Bring back peace on Twitter
 // @author       Anthony Fu (https://github.com/antfu)
 // @license      MIT
+// @homepage     https://github.com/antfu/userscript-clean-twitter
 // @homepageURL  https://github.com/antfu/userscript-clean-twitter
 // @supportURL   https://github.com/antfu/userscript-clean-twitter
 // @match        https://twitter.com/**

@@ -8,6 +8,7 @@
 // @homepageURL  https://github.com/antfu/userscript-clean-twitter
 // @supportURL   https://github.com/antfu/userscript-clean-twitter
 // @match        https://twitter.com/**
+// @match        https://x.com/**
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=twitter.com
 // @grant        GM_getValue
 // @grant        GM_setValue

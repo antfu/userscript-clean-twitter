@@ -48,6 +48,7 @@
 
   const hideHomeTabs = useOption('twitter_hide_home_tabs', 'Hide Home Tabs', true)
   const hideBlueBadge = useOption('twitter_hide_blue_badge', 'Hide Blue Badges', true)
+  const skipDelegateDialog = useOption('twitter_skip_delegate_dialog', 'Skip delegate account switching dialog', true)
 
   const style = document.createElement('style')
   const hides = [
@@ -116,4 +117,37 @@
     }, 1500)
     hideDiscoverMore()
   })
+
+  if (skipDelegateDialog.value) {
+    const ob = new MutationObserver((mut) => {
+      if (!mut.some(m => m.addedNodes.length))
+        return
+      const dialog = document.querySelector('[data-testid="sheetDialog"]')
+      if (!dialog)
+        return
+      const text = dialog.textContent.toLowerCase()
+      if (!text.includes('switch to a delegate account')) {
+        // eslint-disable-next-line no-console
+        console.debug('[Clean Twitter] Dialog is not detected as a "delegate account switching" dialog', dialog)
+        return
+      }
+
+      const buttons = [...dialog.querySelectorAll('button')]
+
+      const confrim = buttons.find(el => el.textContent.toLowerCase().includes('switch accounts'))
+
+      if (!confrim) {
+        // eslint-disable-next-line no-console
+        console.debug('[Clean Twitter] Confirm button not found', dialog)
+        return
+      }
+
+      confrim.click()
+    })
+
+    ob.observe(document.body, {
+      childList: true,
+      subtree: true,
+    })
+  }
 })()

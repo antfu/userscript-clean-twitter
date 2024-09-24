@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Clean Twitter
 // @namespace    http://antfu.me/
-// @version      0.4.0
+// @version      0.5.0
 // @description  Bring back peace on Twitter
 // @author       Anthony Fu (https://github.com/antfu)
 // @license      MIT

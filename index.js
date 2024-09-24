@@ -49,6 +49,7 @@
   const hideHomeTabs = useOption('twitter_hide_home_tabs', 'Hide Home Tabs', true)
   const hideBlueBadge = useOption('twitter_hide_blue_badge', 'Hide Blue Badges', true)
   const skipDelegateDialog = useOption('twitter_skip_delegate_dialog', 'Skip delegate account switching dialog', true)
+  const expandPersonalAccounts = useOption('twitter_expand_personal_accounts', 'Expand drawer of personal accounts', true)
 
   const style = document.createElement('style')
   const hides = [
@@ -60,6 +61,8 @@
     '[aria-label="Trending"] > * > *:nth-child(3), [aria-label="Trending"] > * > *:nth-child(4), [aria-label="Trending"] > * > *:nth-child(5)',
     // "Verified" tab
     '[role="presentation"]:has(> [href="/notifications/verified"][role="tab"])',
+    // "Jobs" tab
+    '[href="/jobs"]',
     // verified badge
     hideBlueBadge.value && '*:has(> * > [aria-label="Verified account"])',
     // Home tabs
@@ -117,6 +120,29 @@
     }, 1500)
     hideDiscoverMore()
   })
+
+  if (expandPersonalAccounts.value) {
+    let timer
+    const ob = new MutationObserver((mut) => {
+      if (!mut.some(m => m.addedNodes.length))
+        return
+      if (timer)
+        clearTimeout(timer)
+      timer = setTimeout(() => {
+        const personalAccount = [...document.querySelectorAll('svg')].find(i => i.parentElement.textContent?.trim() === 'Personal accounts')?.parentElement
+        if (!personalAccount || !personalAccount.nextSibling)
+          return
+        const nextElement = personalAccount.nextSibling
+        if (nextElement.tagName !== 'BUTTON') {
+          personalAccount.click()
+        }
+      }, 200)
+    })
+    ob.observe(document.body, {
+      childList: true,
+      subtree: true,
+    })
+  }
 
   if (skipDelegateDialog.value) {
     const ob = new MutationObserver((mut) => {
